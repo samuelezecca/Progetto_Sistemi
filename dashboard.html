@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Meteo</title>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container">
+    <h1 class="mt-4">Dashboard Meteo</h1>
+    <div class="mb-3">
+        <a href="/" class="btn btn-light">Torna alla Home</a>
+    </div>
+    
+    <div class="form-group">
+        <select id="cmbCitta" class="form-control">
+            <option value="ROMA">ROMA</option>
+            <option value="NAPOLI">NAPOLI</option>
+            <option value="MILANO">MILANO</option>
+            <option value="TORINO">TORINO</option>
+            <option value="FIRENZE">FIRENZE</option>
+            <option value="BOLOGNA">BOLOGNA</option>
+            <option value="VENEZIA">VENEZIA</option>
+            <option value="BARI">BARI</option>
+            <option value="PALERMO">PALERMO</option>
+            <option value="ANCONA">ANCONA</option>
+        </select>
+    </div>
+    
+    <canvas id="graficoMeteo" height="100"></canvas>
+    
+    <script>
+        let chart;
+        
+        function aggiornaGrafico(citta) {
+            fetch(`/grafici?citta=${encodeURIComponent(citta)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Errore nel fetch');
+                    return res.json();
+                })
+                .then(data => {
+                    const ctx = document.getElementById('graficoMeteo').getContext('2d');
+                    
+                    if (chart) {
+                        chart.destroy();
+                    }
+                    
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Temperatura (°C)',
+                                data: data.temperatura,
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: false
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.error('Errore:', err);
+                });
+        }
+        
+        document.getElementById('cmbCitta').addEventListener('change', function() {
+            aggiornaGrafico(this.value);
+        });
+        
+        aggiornaGrafico('ROMA');
+    </script>
+</body>
+</html>

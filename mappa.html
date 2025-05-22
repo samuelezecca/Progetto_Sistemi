@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Mappa Meteo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #mappa { height: 500px; margin-top: 20px; }
+        .nav-button { margin-bottom: 20px; }
+    </style>
+</head>
+<body class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Mappa Meteo</h1>
+        <div class="nav-button">
+            <a href="/" class="btn btn-light">Torna alla Home</a>
+        </div>
+    </div>
+    
+    <div id="mappa"></div>
+    
+    <script>
+        const coordinateCitta = {
+            "ROMA": [41.9028, 12.4964],
+            "NAPOLI": [40.8518, 14.2681],
+            "MILANO": [45.4642, 9.19],
+            "TORINO": [45.0703, 7.6869],
+            "FIRENZE": [43.7696, 11.2558],
+            "BOLOGNA": [44.4949, 11.3426],
+            "VENEZIA": [45.4408, 12.3155],
+            "BARI": [41.1171, 16.8719],
+            "PALERMO": [38.1157, 13.3615],
+            "ANCONA": [43.6158, 13.5189]
+        };
+
+        const mappa = L.map('mappa').setView([42.5, 12.5], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mappa);
+
+        fetch('/dati?ultimi_per_citta=true').then(res => res.json()).then(data => {
+            data.forEach(d => {
+                const coord = coordinateCitta[d.citta];
+                if (coord) {
+                    L.marker(coord).addTo(mappa)
+                     .bindPopup(`<strong>${d.citta}</strong><br>Temp: ${d.temperatura}°C<br>Umidità: ${d.umidita}%<br>Pressione: ${d.pressione} hPa`);
+                }
+            });
+        }).catch(err => console.error('Errore nel caricamento dati:', err));
+    </script>
+</body>
+</html>
