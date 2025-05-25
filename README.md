@@ -19,22 +19,23 @@ Pressione (hPa),
 Città selezionata casualmente.
 
 Come eseguire il progetto:
-1. Verifica presenza di Python:
+1. Unzippare la cartella scaricata da GitHub
+2. Verifica presenza di Python:
 Apri un terminale (Prompt dei comandi).
 Digita: python --version
 Se Python non è installato, vai su https://www.python.org/downloads/ e scaricalo.
 Durante l’installazione, spunta l’opzione "Add Python to PATH".
 Dopo l’installazione, ripeti il comando: python --version
 per verificare che sia tutto a posto.
-2. Apri la cartella del progetto:
+3. Apri la cartella del progetto:
 Vai nella cartella del progetto (Progetto_Sistemi-master).
 Clicca nella barra degli indirizzi in alto (di Esplora Risorse).
 Scrivi cmd e premi Invio: si aprirà il terminale nel percorso giusto.
-3. Avvia il server:
+4. Avvia il server:
 Nel primo terminale, scrivi: python server.py.
-4. Avvia il client:
+5. Avvia il client:
 Apri un secondo terminale (ripeti i passi precedenti) e scrivi: python client.py.
-5. Esplora il progetto:
+6. Esplora il progetto:
 Apri il browser e vai all’indirizzo: http://localhost:8080
 Da qui puoi accedere a tutte le funzionalità dell’interfaccia web.
 
